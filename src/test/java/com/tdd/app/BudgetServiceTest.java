@@ -70,7 +70,7 @@ public class BudgetServiceTest extends TestCase {
 
         array.clear();
 
-        array.add(new Budget("202002", 290));
+        array.add(new Budget("202002", 2800));
         array.add(new Budget("202003", 310));
 
         LocalDate startDate = LocalDate.of(2020, 2, 1);
@@ -86,7 +86,7 @@ public class BudgetServiceTest extends TestCase {
 
         array.clear();
 
-        array.add(new Budget("202002", 290));
+        array.add(new Budget("202002", 0));
         array.add(new Budget("202003", 310));
 
         LocalDate startDate = LocalDate.of(2020, 2, 1);
@@ -94,7 +94,7 @@ public class BudgetServiceTest extends TestCase {
         double budget = budgetService.query(startDate, endDate);
 
 
-        Assert.assertEquals(100, budget, 0.0);
+        Assert.assertEquals(310, budget, 0.0);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class BudgetServiceTest extends TestCase {
         array.clear();
 
         array.add(new Budget("202002", 290));
-        array.add(new Budget("202003", 310));
+        array.add(new Budget("202003", 3100));
 
         LocalDate startDate = LocalDate.of(2020, 2, 10);
         LocalDate endDate = LocalDate.of(2020, 3, 10);
@@ -118,9 +118,9 @@ public class BudgetServiceTest extends TestCase {
 
         array.clear();
 
-        array.add(new Budget("202002", 290));
+        array.add(new Budget("202002", 29));
         array.add(new Budget("202003", 310));
-        array.add(new Budget("202004", 300));
+        array.add(new Budget("202004", 3000));
 
         LocalDate startDate = LocalDate.of(2020, 2, 10);
         LocalDate endDate = LocalDate.of(2020, 4, 10);
