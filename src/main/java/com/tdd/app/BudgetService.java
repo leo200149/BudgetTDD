@@ -1,5 +1,6 @@
 package com.tdd.app;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class BudgetService {
@@ -10,7 +11,7 @@ public class BudgetService {
         this.repo = repo;
     }
 
-    public double query(Date start, Date end) {
+    public double query(LocalDate start, LocalDate end) {
         return 0;
     }
 }
