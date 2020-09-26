@@ -129,4 +129,21 @@ public class BudgetServiceTest extends TestCase {
 
         Assert.assertEquals(1330, budget, 0.0);
     }
+
+    @Test
+    public void search_test_cross_multi_year() {
+
+        array.clear();
+
+        array.add(new Budget("202002", 29));
+        array.add(new Budget("202003", 310));
+        array.add(new Budget("202004", 3000));
+
+        LocalDate startDate = LocalDate.of(2019, 12, 10);
+        LocalDate endDate = LocalDate.of(2020, 4, 10);
+        double budget = budgetService.query(startDate, endDate);
+
+
+        Assert.assertEquals(1339, budget, 0.0);
+    }
 }
