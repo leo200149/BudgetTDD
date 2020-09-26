@@ -52,6 +52,11 @@ public class BudgetServiceTest extends TestCase {
     @Test
     public void test_single_day_selected() {
 
+        array.clear();
+
+        array.add(new Budget("202002", 290));
+        array.add(new Budget("202003", 310));
+
         LocalDate startDate = LocalDate.of(2020, 3, 1);
         LocalDate endDate = LocalDate.of(2020, 3, 1);
         double budget = budgetService.query(startDate, endDate);
@@ -62,6 +67,12 @@ public class BudgetServiceTest extends TestCase {
 
     @Test
     public void search_test_n_month() {
+
+        array.clear();
+
+        array.add(new Budget("202002", 290));
+        array.add(new Budget("202003", 310));
+
         LocalDate startDate = LocalDate.of(2020, 2, 1);
         LocalDate endDate = LocalDate.of(2020, 3, 31);
         double budget = budgetService.query(startDate, endDate);
@@ -72,6 +83,12 @@ public class BudgetServiceTest extends TestCase {
 
     @Test
     public void search_test_cross_month_with_no_badget() {
+
+        array.clear();
+
+        array.add(new Budget("202002", 290));
+        array.add(new Budget("202003", 310));
+
         LocalDate startDate = LocalDate.of(2020, 2, 1);
         LocalDate endDate = LocalDate.of(2020, 3, 31);
         double budget = budgetService.query(startDate, endDate);
@@ -82,6 +99,12 @@ public class BudgetServiceTest extends TestCase {
 
     @Test
     public void search_test_cross_month() {
+
+        array.clear();
+
+        array.add(new Budget("202002", 290));
+        array.add(new Budget("202003", 310));
+
         LocalDate startDate = LocalDate.of(2020, 2, 10);
         LocalDate endDate = LocalDate.of(2020, 3, 10);
         double budget = budgetService.query(startDate, endDate);
@@ -92,6 +115,13 @@ public class BudgetServiceTest extends TestCase {
 
     @Test
     public void search_test_cross_multi_month() {
+
+        array.clear();
+
+        array.add(new Budget("202002", 290));
+        array.add(new Budget("202003", 310));
+        array.add(new Budget("202004", 300));
+
         LocalDate startDate = LocalDate.of(2020, 2, 10);
         LocalDate endDate = LocalDate.of(2020, 4, 10);
         double budget = budgetService.query(startDate, endDate);
