@@ -13,16 +13,13 @@ public class BudgetServiceTest extends TestCase {
     @Mock
     private IBudgetRepo repo;
 
-    private Budget budgetService;
+    private BudgetService budgetService;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         budgetService = new BudgetService(repo);
     }
-
-
-
 
     @Test
     public void single_month_selected() {
