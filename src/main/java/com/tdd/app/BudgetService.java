@@ -28,6 +28,7 @@ public class BudgetService {
 
         // 計算各月份日數
         Map<String, Integer> targets = calculateDaysOfEachMonth(start, end);
+        System.out.println(targets);
 
         // 過濾預算
         AtomicReference<Double> amount = new AtomicReference<>(0D);
@@ -35,7 +36,9 @@ public class BudgetService {
             Integer days = targets.get(budget.yearMonth);
             if (days != null) {
                 int year= Integer.parseInt(budget.yearMonth.substring(0, 4));
+                System.out.println("year" + year);
                 int month = Integer.parseInt(budget.yearMonth.substring(4));
+                System.out.println("month" + month);
                 YearMonth yearMonth = YearMonth.of(year, month);
                 int daysOfMonth = yearMonth.lengthOfMonth();
                 amount.updateAndGet(v -> v + budget.amount * ((double) days / daysOfMonth));
@@ -47,6 +50,52 @@ public class BudgetService {
     }
 
     private Map<String, Integer> calculateDaysOfEachMonth(LocalDate start, LocalDate end) {
-        return new HashMap<>();
+        Map<String, Integer> daysOfEachMonth =new HashMap<>();
+
+        YearMonth startYearMonth = YearMonth.from(start);
+        YearMonth endYearMonth = YearMonth.from(end);
+
+        int startYear = startYearMonth.getYear();
+        int endYear = endYearMonth.getYear();
+        int startMonth = startYearMonth.getMonthValue();
+        int endMonth = endYearMonth.getMonthValue();
+
+        if (startYear == endYear && startMonth == endMonth) {
+            String currentYearMonth = String.format("%04d", startYear) + String.format("%02d", startMonth);
+            int daysOfCurrentMonth = end.getDayOfMonth() - start.getDayOfMonth() + 1;
+            daysOfEachMonth.put(currentYearMonth, daysOfCurrentMonth);
+        } else {
+            for (int yearIndex = startYear; yearIndex <= endYear; yearIndex++) {
+                if (yearIndex == startYear) {
+                    for (int monthIndex = startMonth; monthIndex <= 12; monthIndex++) {
+                        String currentYearMonth = String.format("%04d", yearIndex) + String.format("%02d", monthIndex);
+                        if (monthIndex == startMonth) {
+                            int daysOfCurrentMonth = YearMonth.from(start).lengthOfMonth() - start.getDayOfMonth() + 1;
+                            daysOfEachMonth.put(currentYearMonth, daysOfCurrentMonth);
+                        } else{
+                            daysOfEachMonth.put(currentYearMonth, YearMonth.of(yearIndex, monthIndex).lengthOfMonth());
+                        }
+                    }
+                } else if (yearIndex == endYear) {
+                    for (int monthIndex = 1; monthIndex <= 12; monthIndex++) {
+                        String currentYearMonth = String.format("%04d", yearIndex) + String.format("%02d", monthIndex);
+                        daysOfEachMonth.put(currentYearMonth, YearMonth.of(yearIndex, monthIndex).lengthOfMonth());
+                    }
+                } else {
+                    for (int monthIndex = 1; monthIndex <= endMonth; monthIndex++) {
+                        String currentYearMonth = String.format("%04d", yearIndex) + String.format("%02d", monthIndex);
+                        if (monthIndex == endMonth) {
+                            int daysOfCurrentMonth = end.getDayOfMonth();
+                            daysOfEachMonth.put(currentYearMonth, daysOfCurrentMonth);
+                        } else {
+                            daysOfEachMonth.put(currentYearMonth, YearMonth.of(yearIndex, monthIndex).lengthOfMonth());
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return daysOfEachMonth;
     }
 }
