@@ -31,12 +31,12 @@ public class Period {
         return monthDays;
     }
 
-    Map<String, Integer> monthDays() {
+    private Map<String, Integer> monthDays() {
         Map<String, Integer> daysOfEachMonth = new HashMap<>();
         long monthCount = ChronoUnit.MONTHS.between(getStart(), getEnd());
         for (int monthAdd = 0; monthAdd <= monthCount; monthAdd++) {
             int month = getStart().getMonthValue() + monthAdd;
-            int realMonth = num2Month(month);
+            int realMonth = month % 12 == 0 ? 12 : month % 12;
             int realYear = getStart().getYear() + (month - 1) / 12;
             YearMonth yearMonth = YearMonth.of(realYear, realMonth);
             int daysOfCurrentMonth = yearMonth.lengthOfMonth();
@@ -53,9 +53,5 @@ public class Period {
             daysOfEachMonth.put(yearMonth.format(DateTimeFormatter.ofPattern("yyyyMM")), daysOfCurrentMonth);
         }
         return daysOfEachMonth;
-    }
-
-    private int num2Month(int month) {
-        return month % 12 == 0 ? 12 : month % 12;
     }
 }

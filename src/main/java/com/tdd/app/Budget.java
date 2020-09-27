@@ -14,7 +14,7 @@ public class Budget {
     }
 
     public double periodAmount(Period period) {
-        Integer days = period.monthDays().get(this.yearMonth);
+        Integer days = period.getMonthDays().get(this.yearMonth);
         if (days != null) {
             return this.amount * ((double) days / yearMonth().lengthOfMonth());
         }
