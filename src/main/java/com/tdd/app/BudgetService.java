@@ -2,12 +2,15 @@ package com.tdd.app;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BudgetService {
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMM");
 
     private final IBudgetRepo repo;
 
@@ -32,7 +35,7 @@ public class BudgetService {
         Map<String, Integer> targets = calculateDaysOfEachMonth(start, end);
 
         // 計算預算總和
-        return calculateAmount(targets, budgetList, start, end);
+        return calculateAmount(targets, budgetList);
     }
 
     private Map<String, Integer> calculateDaysOfEachMonth(LocalDate start, LocalDate end) {
@@ -104,21 +107,16 @@ public class BudgetService {
         return daysOfEachMonth;
     }
 
-    private double calculateAmount(Map<String, Integer> targets, List<Budget> budgetList, LocalDate start, LocalDate end) {
+    private double calculateAmount(Map<String, Integer> overlappingDaysEachYearMonth, List<Budget> budgetList) {
         // 過濾預算
         AtomicReference<Double> amount = new AtomicReference<>(0D);
-        budgetList.forEach(budget -> {
-            Integer days = targets.get(budget.yearMonth);
-            if (days != null) {
-                int year= Integer.parseInt(budget.yearMonth.substring(0, 4));
-                System.out.println("year" + year);
-                int month = Integer.parseInt(budget.yearMonth.substring(4));
-                System.out.println("month" + month);
-                YearMonth yearMonth = YearMonth.of(year, month);
-                int daysOfMonth = yearMonth.lengthOfMonth();
-                amount.updateAndGet(v -> v + budget.amount * ((double) days / daysOfMonth));
-            }
-        });
+        budgetList.stream()
+                .filter(budget -> overlappingDaysEachYearMonth.containsKey(budget.yearMonth))
+                .forEach(budget -> {
+                    Integer overlappingDays = overlappingDaysEachYearMonth.get(budget.yearMonth);
+                    int daysOfCurrentYearMonth = YearMonth.parse(budget.yearMonth, FORMATTER).lengthOfMonth();
+                    amount.updateAndGet(totalAmount -> totalAmount + budget.amount * ((double) overlappingDays / daysOfCurrentYearMonth));
+                });
 
         // 加總
         return amount.get();
