@@ -27,17 +27,18 @@ public class BudgetService {
             return 0D;
         }
 
+        // 建立 Period
+        Period period = new Period(start, end);
+
         // 取得預算列表
         List<Budget> budgetList = repo.getAll();
 
-        // 計算各月份日數
-        Map<String, Integer> targets = new Period(start, end).calculateDaysOfEachMonth();
-
         // 計算預算總和
-        return calculateAmount(targets, budgetList);
+        return calculateAmount(period, budgetList);
     }
 
-    private double calculateAmount(Map<String, Integer> overlappingDaysEachYearMonth, List<Budget> budgetList) {
+    private double calculateAmount(Period period, List<Budget> budgetList) {
+        Map<String, Integer> overlappingDaysEachYearMonth = period.calculateDaysOfEachMonth();
         // 過濾預算
         AtomicReference<Double> amount = new AtomicReference<>(0D);
         budgetList.stream()
