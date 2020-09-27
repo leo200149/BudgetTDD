@@ -34,14 +34,12 @@ public class BudgetService {
     }
 
     private double calculateAmount(Period period, List<Budget> budgetList) {
-        Map<String, Integer> overlappingDaysEachYearMonth = period.calculateDaysOfEachMonth();
         // 過濾預算
         AtomicReference<Double> amount = new AtomicReference<>(0D);
-        budgetList.stream()
-                .filter(budget -> overlappingDaysEachYearMonth.containsKey(budget.yearMonth))
-                .forEach(budget -> {
-                    Integer overlappingDays = overlappingDaysEachYearMonth.get(budget.yearMonth);
-                    int daysOfCurrentYearMonth = new Period(budget.firstDay(), budget.lastDay()).calculateDaysOfCurrentMonth();
+        budgetList.forEach(budget -> {
+                    Period budgetPeriod = new Period(budget.firstDay(), budget.lastDay());
+                    int overlappingDays = period.overlappingDays(budgetPeriod);
+                    int daysOfCurrentYearMonth = budgetPeriod.calculateDaysOfCurrentMonth();
                     amount.updateAndGet(totalAmount -> totalAmount + budget.amount * ((double) overlappingDays / daysOfCurrentYearMonth));
                 });
 

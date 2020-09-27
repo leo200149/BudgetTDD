@@ -15,7 +15,7 @@ public class Budget {
     }
 
     public LocalDate firstDay() {
-        return LocalDate.parse(yearMonth + "01", DateTimeFormatter.ofPattern("uuuuMM"));
+        return LocalDate.parse(yearMonth + "01", DateTimeFormatter.ofPattern("uuuuMMdd"));
     }
 
     public LocalDate lastDay() {
