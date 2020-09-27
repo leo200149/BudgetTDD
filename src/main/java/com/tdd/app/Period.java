@@ -56,7 +56,7 @@ public class Period {
         return daysOfEachMonth;
     }
 
-    private int calculateDaysOfCurrentMonth() {
+    public int calculateDaysOfCurrentMonth() {
         return endDate.getDayOfMonth() - startDate.getDayOfMonth() + 1;
     }
 }

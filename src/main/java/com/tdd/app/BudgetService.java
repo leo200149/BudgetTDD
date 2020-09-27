@@ -1,15 +1,11 @@
 package com.tdd.app;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BudgetService {
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMM");
 
     private final IBudgetRepo repo;
 
@@ -45,7 +41,7 @@ public class BudgetService {
                 .filter(budget -> overlappingDaysEachYearMonth.containsKey(budget.yearMonth))
                 .forEach(budget -> {
                     Integer overlappingDays = overlappingDaysEachYearMonth.get(budget.yearMonth);
-                    int daysOfCurrentYearMonth = YearMonth.parse(budget.yearMonth, FORMATTER).lengthOfMonth();
+                    int daysOfCurrentYearMonth = new Period(budget.firstDay(), budget.lastDay()).calculateDaysOfCurrentMonth();
                     amount.updateAndGet(totalAmount -> totalAmount + budget.amount * ((double) overlappingDays / daysOfCurrentYearMonth));
                 });
 
