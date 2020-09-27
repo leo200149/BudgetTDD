@@ -18,28 +18,16 @@ public class Period {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    int calculateDaysOfCurrentMonth() {
-        return getEndDate().getDayOfMonth() - getStartDate().getDayOfMonth() + 1;
-    }
-
     Map<String, Integer> calculateDaysOfEachMonth() {
         Map<String, Integer> daysOfEachMonth = new HashMap<>();
 
-        int currentMonthStart = YearMonth.from(getStartDate()).getMonthValue();
-        int currentMonthEnd = YearMonth.from(getEndDate()).getMonthValue();
-        for (int currentYear = YearMonth.from(getStartDate()).getYear(); currentYear <= YearMonth.from(getEndDate()).getYear(); currentYear++) {
-            if (YearMonth.from(getStartDate()).getYear() != YearMonth.from(getEndDate()).getYear()) {
-                if (currentYear == YearMonth.from(getStartDate()).getYear()) {
+        int currentMonthStart = YearMonth.from(startDate).getMonthValue();
+        int currentMonthEnd = YearMonth.from(endDate).getMonthValue();
+        for (int currentYear = YearMonth.from(startDate).getYear(); currentYear <= YearMonth.from(endDate).getYear(); currentYear++) {
+            if (YearMonth.from(startDate).getYear() != YearMonth.from(endDate).getYear()) {
+                if (currentYear == YearMonth.from(startDate).getYear()) {
                     currentMonthEnd = 12;
-                } else if (currentYear == YearMonth.from(getEndDate()).getYear()) {
+                } else if (currentYear == YearMonth.from(endDate).getYear()) {
                     currentMonthStart = 1;
                 } else {
                     currentMonthStart = 1;
@@ -51,20 +39,24 @@ public class Period {
                 LocalDate overlappedStartDate = YearMonth.of(currentYear, currentMonth).atDay(1);
                 if (currentMonthStart != currentMonthEnd) {
                     if (currentMonth == currentMonthStart) {
-                        overlappedEndDate = YearMonth.from(getStartDate()).atEndOfMonth();
-                        overlappedStartDate = getStartDate();
-                    } else if (currentMonth == YearMonth.from(getEndDate()).getMonthValue()) {
-                        overlappedEndDate = getEndDate();
+                        overlappedEndDate = YearMonth.from(startDate).atEndOfMonth();
+                        overlappedStartDate = startDate;
+                    } else if (currentMonth == YearMonth.from(endDate).getMonthValue()) {
+                        overlappedEndDate = endDate;
                         overlappedStartDate = YearMonth.of(currentYear, currentMonth).atDay(1);
                     }
                 } else {
-                    overlappedEndDate = getEndDate();
-                    overlappedStartDate = getStartDate();
+                    overlappedEndDate = endDate;
+                    overlappedStartDate = startDate;
                 }
                 int daysOfCurrentMonth = new Period(overlappedStartDate, overlappedEndDate).calculateDaysOfCurrentMonth();
                 daysOfEachMonth.put(YearMonth.of(currentYear, currentMonth).format(FORMATTER), daysOfCurrentMonth);
             }
         }
         return daysOfEachMonth;
+    }
+
+    private int calculateDaysOfCurrentMonth() {
+        return endDate.getDayOfMonth() - startDate.getDayOfMonth() + 1;
     }
 }
