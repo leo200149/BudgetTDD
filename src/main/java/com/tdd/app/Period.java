@@ -14,6 +14,9 @@ public class Period {
     }
 
     public int overlappingDays(Period another) {
+        if (this.startDate == null || this.endDate == null || this.endDate.isBefore(this.startDate)) {
+            return 0;
+        }
         LocalDate overlappingStart = startDate.isAfter(another.startDate) ? startDate : another.startDate;
         LocalDate overlappingEnd = endDate.isBefore(another.endDate) ? endDate : another.endDate;
         return (int) (ChronoUnit.DAYS.between(overlappingStart, overlappingEnd) + 1);
